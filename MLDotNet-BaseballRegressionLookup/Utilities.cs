@@ -8,7 +8,6 @@ using System;
 using System.IO;
 using System.Linq;
 
-
 namespace MLDotNet_BaseballRegressionLookup
 {
     public static class Utilities
