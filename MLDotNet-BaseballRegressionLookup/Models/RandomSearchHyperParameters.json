@@ -1,0 +1,682 @@
+[
+  {
+    "MinimumDataPointsInLeaves": 5,
+    "LearningRate": 1.5000325555657188,
+    "NumberOfLeaves": 298,
+    "NumberOfTrees": 1087,
+    "RegressionMetrics": {
+      "L1": 0.20923913043478262,
+      "L2": 9.7360134271099739,
+      "Rms": 3.1202585513239081,
+      "LossFn": 9.7360134271099739,
+      "RSquared": 0.99996863059429431
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 9,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 3,
+    "LearningRate": 1.3032506893986142,
+    "NumberOfLeaves": 79,
+    "NumberOfTrees": 995,
+    "RegressionMetrics": {
+      "L1": 0.20923913043478606,
+      "L2": 9.7360134271099739,
+      "Rms": 3.1202585513239081,
+      "LossFn": 9.7360134271099739,
+      "RSquared": 0.99996863059429431
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 25,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 8,
+    "LearningRate": 1.7290186509182763,
+    "NumberOfLeaves": 1119,
+    "NumberOfTrees": 1039,
+    "RegressionMetrics": {
+      "L1": 0.20923913089216117,
+      "L2": 9.7360134271099739,
+      "Rms": 3.1202585513239081,
+      "LossFn": 9.7360134271099739,
+      "RSquared": 0.99996863059429431
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 2,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 2,
+    "LearningRate": 0.7832255628883027,
+    "NumberOfLeaves": 174,
+    "NumberOfTrees": 852,
+    "RegressionMetrics": {
+      "L1": 0.20923913043478282,
+      "L2": 9.7360134271099739,
+      "Rms": 3.1202585513239081,
+      "LossFn": 9.7360134271099739,
+      "RSquared": 0.99996863059429431
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 37,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 4,
+    "LearningRate": 0.54069561550193268,
+    "NumberOfLeaves": 935,
+    "NumberOfTrees": 1084,
+    "RegressionMetrics": {
+      "L1": 0.20923913043478262,
+      "L2": 9.7360134271099739,
+      "Rms": 3.1202585513239081,
+      "LossFn": 9.7360134271099739,
+      "RSquared": 0.99996863059429431
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 22,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 9,
+    "LearningRate": 1.1926457205590073,
+    "NumberOfLeaves": 582,
+    "NumberOfTrees": 1197,
+    "RegressionMetrics": {
+      "L1": 0.209239138514197,
+      "L2": 9.7360134271100129,
+      "Rms": 3.1202585513239143,
+      "LossFn": 9.7360134271100129,
+      "RSquared": 0.99996863059429431
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 20,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 10,
+    "LearningRate": 1.7546751687115407,
+    "NumberOfLeaves": 951,
+    "NumberOfTrees": 1191,
+    "RegressionMetrics": {
+      "L1": 0.20925215709954934,
+      "L2": 9.7360134396907849,
+      "Rms": 3.1202585533398968,
+      "LossFn": 9.7360135956712384,
+      "RSquared": 0.99996863059425378
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 10,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 10,
+    "LearningRate": 0.81607322558112139,
+    "NumberOfLeaves": 195,
+    "NumberOfTrees": 1176,
+    "RegressionMetrics": {
+      "L1": 0.20936922400321228,
+      "L2": 9.7360146564451426,
+      "Rms": 3.1202587483164184,
+      "LossFn": 9.7360146410759381,
+      "RSquared": 0.99996863059033347
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 23,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 8,
+    "LearningRate": 1.1312869032594781,
+    "NumberOfLeaves": 126,
+    "NumberOfTrees": 530,
+    "RegressionMetrics": {
+      "L1": 0.20959897815360753,
+      "L2": 9.736019135483664,
+      "Rms": 3.1202594660514475,
+      "LossFn": 9.7360191085143484,
+      "RSquared": 0.999968630575902
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 14,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 5,
+    "LearningRate": 1.4629497547833945,
+    "NumberOfLeaves": 1058,
+    "NumberOfTrees": 200,
+    "RegressionMetrics": {
+      "L1": 0.20959389803259323,
+      "L2": 9.736023729241472,
+      "Rms": 3.1202602021692791,
+      "LossFn": 9.7360238782195516,
+      "RSquared": 0.99996863056110086
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 24,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 9,
+    "LearningRate": 0.56423456425044427,
+    "NumberOfLeaves": 559,
+    "NumberOfTrees": 954,
+    "RegressionMetrics": {
+      "L1": 0.2122468010227207,
+      "L2": 9.7371156810430186,
+      "Rms": 3.1204351749464396,
+      "LossFn": 9.7371156334386448,
+      "RSquared": 0.99996862704283551
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 8,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 12,
+    "LearningRate": 1.3730797828771546,
+    "NumberOfLeaves": 168,
+    "NumberOfTrees": 390,
+    "RegressionMetrics": {
+      "L1": 0.25580409358056072,
+      "L2": 9.8763901914739165,
+      "Rms": 3.1426724601004663,
+      "LossFn": 9.87639044311025,
+      "RSquared": 0.99996817830078566
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 11,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 12,
+    "LearningRate": 0.77534803521835627,
+    "NumberOfLeaves": 373,
+    "NumberOfTrees": 1080,
+    "RegressionMetrics": {
+      "L1": 0.2654615023250313,
+      "L2": 10.567447145936976,
+      "Rms": 3.2507610102769746,
+      "LossFn": 10.567447164027431,
+      "RSquared": 0.99996595171737634
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 7,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 8,
+    "LearningRate": 0.60634025588926876,
+    "NumberOfLeaves": 194,
+    "NumberOfTrees": 223,
+    "RegressionMetrics": {
+      "L1": 0.40351000226384059,
+      "L2": 11.859952116764182,
+      "Rms": 3.4438281195152847,
+      "LossFn": 11.859952405848816,
+      "RSquared": 0.99996178727028406
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 15,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 11,
+    "LearningRate": 0.41374284281336837,
+    "NumberOfLeaves": 806,
+    "NumberOfTrees": 387,
+    "RegressionMetrics": {
+      "L1": 0.55854575043246546,
+      "L2": 15.37706441546621,
+      "Rms": 3.9213600211490669,
+      "LossFn": 15.377064663723507,
+      "RSquared": 0.99995045514513492
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 28,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 12,
+    "LearningRate": 0.47648216138895705,
+    "NumberOfLeaves": 1075,
+    "NumberOfTrees": 226,
+    "RegressionMetrics": {
+      "L1": 0.98637557018022914,
+      "L2": 37.735954668295342,
+      "Rms": 6.1429597645023968,
+      "LossFn": 37.735954810043147,
+      "RSquared": 0.99987841486861717
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 5,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 12,
+    "LearningRate": 0.14693687890979318,
+    "NumberOfLeaves": 350,
+    "NumberOfTrees": 838,
+    "RegressionMetrics": {
+      "L1": 0.9808961259752762,
+      "L2": 41.9711862024991,
+      "Rms": 6.47851728426336,
+      "LossFn": 41.971186301296925,
+      "RSquared": 0.99986476896547116
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 1,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 13,
+    "LearningRate": 1.7218781910170233,
+    "NumberOfLeaves": 515,
+    "NumberOfTrees": 1176,
+    "RegressionMetrics": {
+      "L1": 0.4095516246666564,
+      "L2": 60.295225984892895,
+      "Rms": 7.7650000634187313,
+      "LossFn": 60.29522426313207,
+      "RSquared": 0.99980572896492026
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 32,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 16,
+    "LearningRate": 1.0043341305709137,
+    "NumberOfLeaves": 1195,
+    "NumberOfTrees": 1032,
+    "RegressionMetrics": {
+      "L1": 0.42564638323559628,
+      "L2": 60.319374250243989,
+      "Rms": 7.766554850784483,
+      "LossFn": 60.319373582222092,
+      "RSquared": 0.99980565115928255
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 34,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 13,
+    "LearningRate": 1.2276109522965788,
+    "NumberOfLeaves": 811,
+    "NumberOfTrees": 602,
+    "RegressionMetrics": {
+      "L1": 0.4327128947803085,
+      "L2": 60.336461969770305,
+      "Rms": 7.7676548565040084,
+      "LossFn": 60.336462452939983,
+      "RSquared": 0.99980559610270214
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 21,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 23,
+    "LearningRate": 1.7382766798642821,
+    "NumberOfLeaves": 733,
+    "NumberOfTrees": 1183,
+    "RegressionMetrics": {
+      "L1": 0.47770101154276667,
+      "L2": 60.518629825457246,
+      "Rms": 7.7793720714114993,
+      "LossFn": 60.518630022605905,
+      "RSquared": 0.99980500915842418
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 29,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 22,
+    "LearningRate": 1.182650623844308,
+    "NumberOfLeaves": 573,
+    "NumberOfTrees": 1143,
+    "RegressionMetrics": {
+      "L1": 0.47088551448501687,
+      "L2": 60.522801699653328,
+      "Rms": 7.7796402037403585,
+      "LossFn": 60.522802862107177,
+      "RSquared": 0.99980499571665815
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 13,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 17,
+    "LearningRate": 1.3595359308433419,
+    "NumberOfLeaves": 553,
+    "NumberOfTrees": 573,
+    "RegressionMetrics": {
+      "L1": 0.48659086656272255,
+      "L2": 60.655173597586455,
+      "Rms": 7.7881431418269695,
+      "LossFn": 60.655173312780853,
+      "RSquared": 0.99980456921480487
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 31,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 16,
+    "LearningRate": 0.766827074041044,
+    "NumberOfLeaves": 1154,
+    "NumberOfTrees": 845,
+    "RegressionMetrics": {
+      "L1": 0.48935039692754828,
+      "L2": 60.708522836154216,
+      "Rms": 7.7915674184437504,
+      "LossFn": 60.708520697004424,
+      "RSquared": 0.99980439732372017
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 36,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 22,
+    "LearningRate": 1.0842090057624547,
+    "NumberOfLeaves": 878,
+    "NumberOfTrees": 789,
+    "RegressionMetrics": {
+      "L1": 0.5561696555392408,
+      "L2": 61.531182981583875,
+      "Rms": 7.8441814730144968,
+      "LossFn": 61.531184995897924,
+      "RSquared": 0.999801746715229
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 26,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 22,
+    "LearningRate": 1.0842090057624547,
+    "NumberOfLeaves": 878,
+    "NumberOfTrees": 789,
+    "RegressionMetrics": {
+      "L1": 0.5561696555392408,
+      "L2": 61.531182981583875,
+      "Rms": 7.8441814730144968,
+      "LossFn": 61.531184995897924,
+      "RSquared": 0.999801746715229
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 12,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 17,
+    "LearningRate": 0.82316300048407309,
+    "NumberOfLeaves": 15,
+    "NumberOfTrees": 731,
+    "RegressionMetrics": {
+      "L1": 1.2732323392712965,
+      "L2": 62.517781121473163,
+      "Rms": 7.9068186473115194,
+      "LossFn": 62.517780701012569,
+      "RSquared": 0.99979856789901744
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 33,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 19,
+    "LearningRate": 0.56930814010524577,
+    "NumberOfLeaves": 540,
+    "NumberOfTrees": 843,
+    "RegressionMetrics": {
+      "L1": 0.66158579330587464,
+      "L2": 63.899638639373975,
+      "Rms": 7.9937249539481892,
+      "LossFn": 63.899637675349418,
+      "RSquared": 0.99979411555828979
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 19,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 15,
+    "LearningRate": 0.94297531327138451,
+    "NumberOfLeaves": 739,
+    "NumberOfTrees": 366,
+    "RegressionMetrics": {
+      "L1": 0.67803605014465074,
+      "L2": 65.4615166660007,
+      "Rms": 8.0908291704868365,
+      "LossFn": 65.4615161777479,
+      "RSquared": 0.99978908319202953
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 6,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 20,
+    "LearningRate": 0.77111289712885067,
+    "NumberOfLeaves": 1155,
+    "NumberOfTrees": 517,
+    "RegressionMetrics": {
+      "L1": 0.85605006977758091,
+      "L2": 70.421005136972312,
+      "Rms": 8.3917224177740959,
+      "LossFn": 70.421005955617787,
+      "RSquared": 0.999773103735232
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 17,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 22,
+    "LearningRate": 1.1455678230619839,
+    "NumberOfLeaves": 136,
+    "NumberOfTrees": 256,
+    "RegressionMetrics": {
+      "L1": 1.2528351652450302,
+      "L2": 85.255550250062385,
+      "Rms": 9.2333932143098068,
+      "LossFn": 85.255549675641817,
+      "RSquared": 0.9997253068759121
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 40,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 22,
+    "LearningRate": 1.1455678230619839,
+    "NumberOfLeaves": 136,
+    "NumberOfTrees": 256,
+    "RegressionMetrics": {
+      "L1": 1.2528351652450302,
+      "L2": 85.255550250062385,
+      "Rms": 9.2333932143098068,
+      "LossFn": 85.255549675641817,
+      "RSquared": 0.9997253068759121
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 18,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 14,
+    "LearningRate": 1.1855052606577543,
+    "NumberOfLeaves": 1176,
+    "NumberOfTrees": 135,
+    "RegressionMetrics": {
+      "L1": 1.224629280088996,
+      "L2": 96.741784351430951,
+      "Rms": 9.8357401526997936,
+      "LossFn": 96.741782995908508,
+      "RSquared": 0.99968829826450734
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 35,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 22,
+    "LearningRate": 1.9194478099511227,
+    "NumberOfLeaves": 714,
+    "NumberOfTrees": 286,
+    "RegressionMetrics": {
+      "L1": 1.8770961914376532,
+      "L2": 119.53359071589843,
+      "Rms": 10.933141850168159,
+      "LossFn": 119.53359108047822,
+      "RSquared": 0.99961486313359216
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 30,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 16,
+    "LearningRate": 0.1077365090827162,
+    "NumberOfLeaves": 903,
+    "NumberOfTrees": 869,
+    "RegressionMetrics": {
+      "L1": 1.7459466764761338,
+      "L2": 163.00479197522426,
+      "Rms": 12.767333001657953,
+      "LossFn": 163.0047908771605,
+      "RSquared": 0.999474799055104
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 4,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 22,
+    "LearningRate": 1.6819407534212529,
+    "NumberOfLeaves": 673,
+    "NumberOfTrees": 98,
+    "RegressionMetrics": {
+      "L1": 3.0793515534976978,
+      "L2": 233.63817728425354,
+      "Rms": 15.285227420102506,
+      "LossFn": 233.63818088990982,
+      "RSquared": 0.99924721850206633
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 38,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 19,
+    "LearningRate": 0.94085774422663171,
+    "NumberOfLeaves": 531,
+    "NumberOfTrees": 84,
+    "RegressionMetrics": {
+      "L1": 2.5219243129696567,
+      "L2": 236.85532077520443,
+      "Rms": 15.390104638214922,
+      "LossFn": 236.85531851456648,
+      "RSquared": 0.999236852875505
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 39,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 22,
+    "LearningRate": 1.0292535805954848,
+    "NumberOfLeaves": 632,
+    "NumberOfTrees": 76,
+    "RegressionMetrics": {
+      "L1": 3.2341370873830426,
+      "L2": 284.830021736289,
+      "Rms": 16.876907943586378,
+      "LossFn": 284.8300171324974,
+      "RSquared": 0.99908227853464948
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 3,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 21,
+    "LearningRate": 0.46082074031039177,
+    "NumberOfLeaves": 53,
+    "NumberOfTrees": 128,
+    "RegressionMetrics": {
+      "L1": 3.0323799660139361,
+      "L2": 302.38505004671322,
+      "Rms": 17.3892222381196,
+      "LossFn": 302.38504842136666,
+      "RSquared": 0.99902571628672665
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 16,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  },
+  {
+    "MinimumDataPointsInLeaves": 21,
+    "LearningRate": 1.7854052623596066,
+    "NumberOfLeaves": 764,
+    "NumberOfTrees": 34,
+    "RegressionMetrics": {
+      "L1": 6.9179725308918449,
+      "L2": 678.5412418080665,
+      "Rms": 26.048824192428849,
+      "LossFn": 678.54124414707155,
+      "RSquared": 0.99781374217880237
+    },
+    "AlgorithmName": "FastTree",
+    "Iteration": 27,
+    "MLContextSeed": 100,
+    "LabelColumn": "H"
+  }
+]

@@ -1,5 +1,4 @@
-﻿using Microsoft.ML.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,12 +8,12 @@ namespace MLDotNet_BaseballRegressionLookup
     {
         public string AlgorithmName { get; set; }
         public int Iteration { get; set; }
+        public int MLContextSeed { get; set; }
+        public string LabelColumn { get; set; }
 
-        public int MinimumDataPointsInTrees { get; set; }
-        public double LearningRate { get; set; }
-        public int NumberOfLeaves { get; set; }
-        public int NumberOfTrees { get; set; }
-
-        public RegressionMetrics RegressionMetrics { get; set; }
+        public string GetModelName()
+        {
+            return string.Format("{0}-{1}", AlgorithmName, Iteration);
+        }
     }
 }

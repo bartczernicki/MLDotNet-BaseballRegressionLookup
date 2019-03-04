@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace MLDotNet_BaseballRegressionLookup
 {
@@ -34,6 +35,8 @@ namespace MLDotNet_BaseballRegressionLookup
                 "GeneralizedAdditiveModels", "OnlineGradientDescent",
             "PoissonRegression", "StochasticDualCoordinateAscent"};
 
+        private static int mlContextSeed = 100;
+
         static void Main(string[] args)
         {
             Console.WriteLine("Starting Training Job.");
@@ -46,7 +49,7 @@ namespace MLDotNet_BaseballRegressionLookup
             Console.WriteLine("##########################\n");
 
             // Set the seed explicitly for reproducability (models will be built with consistent results)
-            _mlContext = new MLContext(seed: 200);
+            _mlContext = new MLContext(seed: mlContextSeed);
 
             // Read the training/validation data from a text file
             var dataTrain = _mlContext.Data.ReadFromTextFile<MLBBaseballBatter>(path: _trainDataPath,
@@ -84,7 +87,7 @@ namespace MLDotNet_BaseballRegressionLookup
             // Build simple data pipeline
             var learningPipelineFastTreeHits =
                 Utilities.GetBaseLinePipeline(_mlContext, featureColumns).Append(
-                _mlContext.Regression.Trainers.FastTree(labelColumn: _labelColunmn, learningRate: 0.05)
+                _mlContext.Regression.Trainers.FastTree(labelColumn: _labelColunmn)
                 );
             // Fit (build a Machine Learning Model)
             var modelPipelineFastTreeHits = learningPipelineFastTreeHits.Fit(cachedTrainData);
@@ -98,7 +101,7 @@ namespace MLDotNet_BaseballRegressionLookup
             // Build simple data pipeline
             var learningPipelineFastTreeTweedieHits =
                 Utilities.GetBaseLinePipeline(_mlContext, featureColumns).Append(
-                _mlContext.Regression.Trainers.FastTreeTweedie(labelColumn: _labelColunmn, learningRate: 0.1, numLeaves: 50, numTrees: 1000)
+                _mlContext.Regression.Trainers.FastTreeTweedie(labelColumn: _labelColunmn)
                 );
             // Fit (build a Machine Learning Model)
             var modelPipelineFastTreeTweedieHits = learningPipelineFastTreeTweedieHits.Fit(cachedTrainData);
@@ -179,11 +182,11 @@ namespace MLDotNet_BaseballRegressionLookup
 
                 Console.WriteLine("Evaluation Metrics for " + algorithmsForModelExplainability[i] + " | " + _labelColunmn);
                 Console.WriteLine("******************");
-                Console.WriteLine("L1:         " + Math.Round(regressionMetrics.L1, 4).ToString());
-                Console.WriteLine("L2:         " + Math.Round(regressionMetrics.L2, 4).ToString());
-                Console.WriteLine("LossFn:     " + Math.Round(regressionMetrics.LossFn, 4).ToString());
-                Console.WriteLine("Rms:        " + Math.Round(regressionMetrics.Rms, 4).ToString());
-                Console.WriteLine("RSquared:   " + Math.Round(regressionMetrics.RSquared, 4).ToString());
+                Console.WriteLine("L1:         " + Math.Round(regressionMetrics.L1, 5).ToString());
+                Console.WriteLine("L2:         " + Math.Round(regressionMetrics.L2, 5).ToString());
+                Console.WriteLine("LossFn:     " + Math.Round(regressionMetrics.LossFn, 5).ToString());
+                Console.WriteLine("Rms:        " + Math.Round(regressionMetrics.Rms, 5).ToString());
+                Console.WriteLine("RSquared:   " + Math.Round(regressionMetrics.RSquared, 5).ToString());
                 Console.WriteLine("******************");
 
                 var loadedModel = Utilities.LoadModel(_mlContext, Utilities.GetModelPath(_appPath, algorithmName: algorithmsForModelExplainability[i], isOnnx: false, label: _labelColunmn));
@@ -204,76 +207,162 @@ namespace MLDotNet_BaseballRegressionLookup
             Console.WriteLine("Step 4: Hyperparameter Random Search...");
             Console.WriteLine("##########################\n");
 
-            var numberOfIterations = Enumerable.Range(0, 40).ToArray();
+
+            var hyperparameterPerformanceMetricResults = new ConcurrentBag<RegressionTreeAlgorithmHyperparameter>();
+
+            Stopwatch swRandomSearch = new Stopwatch();
+            swRandomSearch.Start();
+
+            // Build a list of Random Search Hyperparameters
+            var maxNumberOfIterations = 40;
+            var numberOfIterationsArray = Enumerable.Range(0, maxNumberOfIterations).ToArray();
             ParallelOptions options = new ParallelOptions();
             options.MaxDegreeOfParallelism = 14;  // usually set this to number of available worker threads
 
-            ConcurrentBag<AlgorithmHyperparameter> hyperparameterPerformanceMetricResults = new ConcurrentBag<AlgorithmHyperparameter>();
-
-            Parallel.For(0, numberOfIterations.Length, options,
-                         i => {
+            Parallel.For(0, numberOfIterationsArray.Length, options,
+                         i =>
+                         {
                              var algorithmName = "FastTree";
-                             var mlContext = new MLContext(seed: 300, conc: 1);
+                             var mlContextSeed = 100;
                              var iteration = i + 1;
+                             var labelColumn = "H";
+                             var appPath = Path.GetDirectoryName(Environment.GetCommandLineArgs()[0]);
 
-                             var minLearningRate = 0.01;
+                             var minLearningRate = 0.005;
                              var maxLearningRate = 2;
 
                              // Generate hyperparameters based on random values in ranges
                              // Note: In production, you would use MBO or more advanced statistical distributions
                              // Currently doing a pseudo-uniform distribution over pragmatic ranges
-                             var newRandom = new Random((int) DateTime.Now.Ticks);
-                             var numberOfleaves = newRandom.Next(1, 800);
-                             var numberOfTrees = newRandom.Next(1, 800);
-                             var minDataPointsInTrees = newRandom.Next(2, 25);
+                             var newRandom = new Random((int)DateTime.Now.Ticks);
+                             var numberOfleaves = newRandom.Next(2, 1200); // minimum is 2
+                             var numberOfTrees = newRandom.Next(1, 1200);
+                             var minDataPointsInTrees = newRandom.Next(1, 25);
                              var learningRate = newRandom.NextDouble() * (maxLearningRate - minLearningRate) + minLearningRate;
-                             var modelName = "FastTree" + "RandomSearch" + iteration;
-
-                             var learningPipelineFastTreeTweedieGridSearchHits =
-                                Utilities.GetBaseLinePipeline(mlContext, featureColumns).Append(
-                                mlContext.Regression.Trainers.FastTree(labelColumn: _labelColunmn, learningRate: learningRate,
-                                numLeaves: numberOfleaves, numTrees: numberOfTrees, minDatapointsInLeaves: minDataPointsInTrees)
-                                );
-                             // Fit (build a Machine Learning Model)
-                             var modelFastTreeTweedieGridSearchHits = learningPipelineFastTreeTweedieGridSearchHits.Fit(cachedTrainData);
-                             // Save the model to storage
-                             Utilities.SaveModel(_appPath, mlContext, modelName, _labelColunmn, modelFastTreeTweedieGridSearchHits);
-                             // Utilities.SaveOnnxModel(_appPath, modelName, _labelColunmn, modelFastTreeTweedieGridSearchHits, mlContext, cachedTrainData);
-
-                             var transformedData = modelFastTreeTweedieGridSearchHits.Transform(cachedValidationData);
-                             // Evaluate the model
-                             var regressionMetrics = //_mlContext.Regression.Evaluate(transformedData, "H");
-                                 Utilities.GetRegressionModelMetrics(_appPath, mlContext, _labelColunmn, modelName, cachedValidationData);
+                             var modelName = algorithmName + "RandomSearch" + iteration;
 
                              // Add the metrics to the Concurrent Bag (List)
-                             hyperparameterPerformanceMetricResults.Add(
-                                 new AlgorithmHyperparameter {
-                                     AlgorithmName = algorithmName,
-                                     Iteration = iteration,
-                                     LearningRate = learningRate,
-                                     MinimumDataPointsInTrees = minDataPointsInTrees,
-                                     NumberOfLeaves = numberOfleaves,
-                                     NumberOfTrees = numberOfTrees,
-                                     RegressionMetrics = regressionMetrics
-                                 }
-                                 );
+                             var regressionTreeHyperParameters =
+                                                              new RegressionTreeAlgorithmHyperparameter
+                                                              {
+                                                                  AlgorithmName = algorithmName,
+                                                                  LabelColumn = labelColumn,
+                                                                  Iteration = iteration,
+                                                                  MLContextSeed = mlContextSeed,
+                                                                  // Regression parameters
+                                                                  LearningRate = learningRate,
+                                                                  MinimumDataPointsInLeaves = minDataPointsInTrees,
+                                                                  NumberOfLeaves = numberOfleaves,
+                                                                  NumberOfTrees = numberOfTrees,
+                                                                 // RegressionMetrics = regressionMetrics
+                                                              };
+                             hyperparameterPerformanceMetricResults.Add(regressionTreeHyperParameters);
 
-                             Console.WriteLine("Evaluation Metrics for " + "FastTreeTweedie" + " | " + _labelColunmn);
-                             Console.WriteLine("******************");
-                             Console.WriteLine("Iteration {0} - Hyperparameters: NumOfleaves: {1} NumOfTrees: {2} MinDataPoints: {3} LearningRate: {4}", iteration, numberOfleaves, numberOfTrees, minDataPointsInTrees, learningRate);
-                             Console.WriteLine("L1:         " + Math.Round(regressionMetrics.L1, 4).ToString());
-                             Console.WriteLine("L2:         " + Math.Round(regressionMetrics.L2, 4).ToString());
-                             Console.WriteLine("LossFn:     " + Math.Round(regressionMetrics.LossFn, 4).ToString());
-                             Console.WriteLine("Rms:        " + Math.Round(regressionMetrics.Rms, 4).ToString());
-                             Console.WriteLine("RSquared:   " + Math.Round(regressionMetrics.RSquared, 4).ToString());
-                         });
 
+                         }
+                        );
+
+            // Build a list of Tasks to parallelize the model creation using random hyperparameter search
+            List<Task> modelTasks = new List<Task>();
+            foreach(var modelTaskHyperParameters in hyperparameterPerformanceMetricResults)
+            {
+                var appPath = _appPath;
+                var task = new Task<RegressionTreeAlgorithmHyperparameter>(
+                    () => ProcessModel(modelTaskHyperParameters, cachedValidationData, appPath));
+                modelTasks.Add(task);
+
+                task.Start();
+            }
+
+            // Wait for all of the tasks to complete
+            Task.WaitAll(modelTasks.ToArray());
+
+            // TODO: Remove
+            //    Parallel.For(0, numberOfIterationsArray.Length, options,
+            //i => {
+            //    var algorithmName = "FastTree";
+            //    var mlContextSeed = 300;
+            //    var mlContext = new MLContext(seed: mlContextSeed, conc: 1);
+            //    var iteration = i + 1;
+            //    var labelColumn = "H";
+            //    var appPath = Path.GetDirectoryName(Environment.GetCommandLineArgs()[0]);
+
+            //    var minLearningRate = 0.005;
+            //    var maxLearningRate = 2;
+
+            //    // Generate hyperparameters based on random values in ranges
+            //    // Note: In production, you would use MBO or more advanced statistical distributions
+            //    // Currently doing a pseudo-uniform distribution over pragmatic ranges
+            //    var newRandom = new Random((int) DateTime.Now.Ticks);
+            //    var numberOfleaves = newRandom.Next(2, 1200); // minimum is 2
+            //    var numberOfTrees = newRandom.Next(1, 1200);
+            //    var minDataPointsInTrees = newRandom.Next(1, 25);
+            //    var learningRate = newRandom.NextDouble() * (maxLearningRate - minLearningRate) + minLearningRate;
+            //    var modelName = algorithmName + "RandomSearch" + iteration;
+
+            //    var learningPipelineFastTreeTweedieGridSearchHits =
+            //       Utilities.GetBaseLinePipeline(mlContext, featureColumns).Append(
+            //       mlContext.Regression.Trainers.FastTree(labelColumn: labelColumn, learningRate: learningRate,
+            //       numLeaves: numberOfleaves, numTrees: numberOfTrees, minDatapointsInLeaves: minDataPointsInTrees)
+            //       );
+            //    // Fit (build a Machine Learning Model)
+            //    var modelFastTreeTweedieGridSearchHits = learningPipelineFastTreeTweedieGridSearchHits.Fit(cachedTrainData);
+            //    // Save the model to storage
+            //    Utilities.SaveModel(_appPath, mlContext, modelName, labelColumn, modelFastTreeTweedieGridSearchHits);
+
+            //    var transformedData = modelFastTreeTweedieGridSearchHits.Transform(cachedValidationData);
+
+            //    // Evaluate the model
+            //    var regressionMetrics = mlContext.Regression.Evaluate(transformedData, "H");
+
+            //    // Add the metrics to the Concurrent Bag (List)
+            //    var regressionTreeHyperParameters =
+            //                                     new RegressionTreeAlgorithmHyperparameter
+            //                                     {
+            //                                         AlgorithmName = algorithmName,
+            //                                         Iteration = iteration,
+            //                                         MLContextSeed = mlContextSeed,
+            //                                         LearningRate = learningRate,
+            //                                         // Regression parameters
+            //                                         MinimumDataPointsInLeaves = minDataPointsInTrees,
+            //                                         NumberOfLeaves = numberOfleaves,
+            //                                         NumberOfTrees = numberOfTrees,
+            //                                         RegressionMetrics = regressionMetrics
+            //                                     };
+            //    hyperparameterPerformanceMetricResults.Add(regressionTreeHyperParameters);
+
+
+            //    var consoleOutput = string.Format(
+            //       "Evaluation Metrics for {0} | {1}\n" +
+            //       "{2}\n" +
+            //       "**********************************************\n" +
+            //       "L1:         {3}\n" +
+            //       "L2:         {4}\n" +
+            //       "LossFn:     {5}\n" +
+            //       "Rms:        {6}\n" +
+            //       "RSquared    {7}\n",
+            //        modelName, labelColumn,
+            //        regressionTreeHyperParameters.ToString(),
+            //        Math.Round(regressionMetrics.L1, 5).ToString(),
+            //        Math.Round(regressionMetrics.L2, 5).ToString(),
+            //        Math.Round(regressionMetrics.LossFn, 5).ToString(),
+            //        Math.Round(regressionMetrics.Rms, 5).ToString(),
+            //        Math.Round(regressionMetrics.RSquared, 5).ToString()
+            //        );
+
+            //    Console.Out.WriteLineAsync(consoleOutput);
+            //});
+
+            swRandomSearch.Stop();
+            var elapsedSeconds = swRandomSearch.Elapsed.Seconds;
+            Console.WriteLine("Hyperparameter Random Search Time: " + elapsedSeconds + " seconds");
+            Console.WriteLine();
 
             // Order by the best performing model, serialize to JSON
-            List<AlgorithmHyperparameter> hyperparameterPerformanceMetricResultsOrdered = hyperparameterPerformanceMetricResults
+            var hyperparameterPerformanceMetricResultsOrdered = hyperparameterPerformanceMetricResults
                 .OrderByDescending(a => a.RegressionMetrics.RSquared).ToList();
             var json = JsonConvert.SerializeObject(hyperparameterPerformanceMetricResultsOrdered, Formatting.Indented);
-            var jsonPath = Path.Combine(_appPath, "..", "..", "..", "Models", "GridSearchHyperParameters.json");
+            var jsonPath = Path.Combine(_appPath, "..", "..", "..", "Models", "RandomSearchHyperParameters.json");
             File.WriteAllText(jsonPath, json);
 
 
@@ -281,18 +370,28 @@ namespace MLDotNet_BaseballRegressionLookup
 
             #region Step 5) New Predictions - Using Ficticious Player Data
 
-            //Console.WriteLine("##########################");
-            //Console.WriteLine("Step 4: New Predictions...");
-            //Console.WriteLine("##########################\n");
+            Console.WriteLine("##########################");
+            Console.WriteLine("Step 5: New Predictions...");
+            Console.WriteLine("##########################\n");
 
             // Set algorithm type to use for predictions
-            // Retrieve model path
-            // TODO: Hardcoded add perscriptive rules engine
             var algorithmTypeName = "FastTree";
             var loadedModelHits = Utilities.LoadModel(_mlContext, (Utilities.GetModelPath(_appPath, algorithmTypeName, false, "H")));
+            // Use the "best" model from the random search
+            var loadedModelRandomSearchHits = Utilities.LoadModel(_mlContext, (Utilities.GetModelPath(_appPath,
+                hyperparameterPerformanceMetricResultsOrdered[0].GetModelName(), false, "H")));
+
+            //var transformedData = loadedModelHits.Transform(cachedValidationData);
+            //var transformedData2 = loadedModelRandomSearchHits.Transform(cachedValidationData);
+            //var test1 = transformedData.Preview(1000).RowView.ToArray();
+            //var test2 = transformedData2.Preview(1000).RowView.ToArray();
+            // Evaluate the model
+            //var regressionMetricsTest = _mlContext.Regression.Evaluate(transformedData, "H");
+            //var regressionMetricsTest2 = _mlContext.Regression.Evaluate(transformedData2, "H");
 
             // Create prediction engine
             var predEngineHits = loadedModelHits.CreatePredictionEngine<MLBBaseballBatter, HitsPredictions>(_mlContext);
+            var predEngineRandomSearchHits = loadedModelRandomSearchHits.CreatePredictionEngine<MLBBaseballBatter, HitsPredictions>(_mlContext);
 
             // Create statistics for bad, average & great player
             var badMLBBatter = new MLBBaseballBatter
@@ -379,25 +478,78 @@ namespace MLDotNet_BaseballRegressionLookup
             var predBadHits = predEngineHits.Predict(badMLBBatter);
             var predAverageHits = predEngineHits.Predict(averageMLBBatter);
             var predGreatHits = predEngineHits.Predict(greatMLBBatter);
+            var predBadRandomSearchHits = predEngineRandomSearchHits.Predict(badMLBBatter);
+            var predAverageRandomSearchHits = predEngineRandomSearchHits.Predict(averageMLBBatter);
+            var predGreatRandomSearchHits = predEngineRandomSearchHits.Predict(greatMLBBatter);
 
             // Report the results
             Console.WriteLine("Algorithm Used for Model Prediction: " + algorithmTypeName);
             Console.WriteLine("Bad Baseball Player Prediction");
             Console.WriteLine("------------------------------");
             Console.WriteLine("Hits Prediction: " + predBadHits.Hits.ToString() + " | " + "Actual Hits: " + badMLBBatter.H);
+            Console.WriteLine("Hits Prediction: " + predBadRandomSearchHits.Hits.ToString() + " | " + "Actual Hits: " + badMLBBatter.H);
             Console.WriteLine();
             Console.WriteLine("Average Baseball Player Prediction");
             Console.WriteLine("------------------------------");
             Console.WriteLine("Hits Prediction: " + predAverageHits.Hits.ToString() + " | " + "Actual Hits: " + averageMLBBatter.H);
+            Console.WriteLine("Hits Prediction: " + predAverageRandomSearchHits.Hits.ToString() + " | " + "Actual Hits: " + averageMLBBatter.H);
             Console.WriteLine();
             Console.WriteLine("Great Baseball Player Prediction");
             Console.WriteLine("------------------------------");
             Console.WriteLine("Hits Prediction: " + predGreatHits.Hits.ToString() + " | " + "Actual Hits: " + greatMLBBatter.H);
+            Console.WriteLine("Hits Prediction: " + predGreatRandomSearchHits.Hits.ToString() + " | " + "Actual Hits: " + greatMLBBatter.H);
             Console.WriteLine();
 
             #endregion
 
             Console.ReadLine();
+        }
+
+        public static RegressionTreeAlgorithmHyperparameter ProcessModel(RegressionTreeAlgorithmHyperparameter hyperParameters,
+            IDataView validationData, string appPath//,
+            //CancellationToken ct
+            )
+        {
+            var mlContext = new MLContext(seed: hyperParameters.MLContextSeed);
+
+            var learningPipelineGridSearchHits =
+               Utilities.GetBaseLinePipeline(mlContext, featureColumns).Append(
+               mlContext.Regression.Trainers.FastTree(labelColumn: hyperParameters.LabelColumn, learningRate: hyperParameters.LearningRate,
+               numLeaves: hyperParameters.NumberOfLeaves, numTrees: hyperParameters.NumberOfTrees, minDatapointsInLeaves: hyperParameters.MinimumDataPointsInLeaves)
+               );
+            // Fit (build a Machine Learning Model)
+            var modelGridSearchHits = learningPipelineGridSearchHits.Fit(validationData);
+            // Save the model to storage
+            Utilities.SaveModel(appPath, mlContext, hyperParameters.GetModelName(), hyperParameters.LabelColumn, modelGridSearchHits);
+            // Utilities.SaveOnnxModel(appPath, hyperParameters.GetModelName(), hyperParameters.LabelColumn, modelGridSearchHits, mlContext, validationData);
+
+            var transformedData = modelGridSearchHits.Transform(validationData);
+
+            // Evaluate the model
+            var regressionMetrics = mlContext.Regression.Evaluate(transformedData, hyperParameters.LabelColumn);
+            hyperParameters.RegressionMetrics = regressionMetrics;
+
+            var consoleOutput = string.Format(
+               "Evaluation Metrics for {0} | {1}\n" +
+               "{2}\n" +
+               "**********************************************\n" +
+               "L1:         {3}\n" +
+               "L2:         {4}\n" +
+               "LossFn:     {5}\n" +
+               "Rms:        {6}\n" +
+               "RSquared    {7}\n",
+                hyperParameters.GetModelName(), hyperParameters.LabelColumn,
+                hyperParameters.ToString(),
+                Math.Round(regressionMetrics.L1, 5).ToString(),
+                Math.Round(regressionMetrics.L2, 5).ToString(),
+                Math.Round(regressionMetrics.LossFn, 5).ToString(),
+                Math.Round(regressionMetrics.Rms, 5).ToString(),
+                Math.Round(regressionMetrics.RSquared, 5).ToString()
+                );
+
+            Console.Out.WriteLineAsync(consoleOutput);
+
+            return hyperParameters;
         }
     }
 }
