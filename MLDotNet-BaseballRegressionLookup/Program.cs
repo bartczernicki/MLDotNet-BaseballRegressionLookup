@@ -214,7 +214,7 @@ namespace MLDotNet_BaseballRegressionLookup
             swRandomSearch.Start();
 
             // Build a list of Random Search Hyperparameters
-            var maxNumberOfIterations = 40;
+            var maxNumberOfIterations = 20;
             var numberOfIterationsArray = Enumerable.Range(0, maxNumberOfIterations).ToArray();
             ParallelOptions options = new ParallelOptions();
             options.MaxDegreeOfParallelism = 14;  // usually set this to number of available worker threads
