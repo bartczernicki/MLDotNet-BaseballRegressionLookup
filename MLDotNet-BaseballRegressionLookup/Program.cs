@@ -33,7 +33,7 @@ namespace MLDotNet_BaseballRegressionLookup
         private static string[] algorithmsForModelExplainability = new string[] {
                 "FastTree", "FastTreeTweedie",
                 "GeneralizedAdditiveModels", "OnlineGradientDescent",
-            "PoissonRegression", "StochasticDualCoordinateAscent"};
+                "PoissonRegression", "StochasticDualCoordinateAscent"};
 
         private static int mlContextSeed = 100;
 
@@ -253,11 +253,9 @@ namespace MLDotNet_BaseballRegressionLookup
                                                                   LearningRate = learningRate,
                                                                   MinimumDataPointsInLeaves = minDataPointsInTrees,
                                                                   NumberOfLeaves = numberOfleaves,
-                                                                  NumberOfTrees = numberOfTrees,
-                                                                 // RegressionMetrics = regressionMetrics
+                                                                  NumberOfTrees = numberOfTrees
                                                               };
                              hyperparameterPerformanceMetricResults.Add(regressionTreeHyperParameters);
-
 
                          }
                         );
