@@ -210,8 +210,7 @@ namespace MLDotNet_BaseballRegressionLookup
 
             var hyperparameterPerformanceMetricResults = new ConcurrentBag<RegressionTreeAlgorithmHyperparameter>();
 
-            Stopwatch swRandomSearch = new Stopwatch();
-            swRandomSearch.Start();
+            var dateTime = DateTime.Now;
 
             // Build a list of Random Search Hyperparameters
             var maxNumberOfIterations = 20;
@@ -266,7 +265,9 @@ namespace MLDotNet_BaseballRegressionLookup
             {
                 var appPath = _appPath;
                 var task = new Task<RegressionTreeAlgorithmHyperparameter>(
-                    () => ProcessModel(modelTaskHyperParameters, cachedValidationData, appPath));
+                    () =>
+                ProcessModel(modelTaskHyperParameters, cachedValidationData, appPath)//;
+                    );
                 modelTasks.Add(task);
 
                 task.Start();
@@ -351,8 +352,7 @@ namespace MLDotNet_BaseballRegressionLookup
             //    Console.Out.WriteLineAsync(consoleOutput);
             //});
 
-            swRandomSearch.Stop();
-            var elapsedSeconds = swRandomSearch.Elapsed.Seconds;
+            var elapsedSeconds = (DateTime.Now - dateTime).TotalSeconds;
             Console.WriteLine("Hyperparameter Random Search Time: " + elapsedSeconds + " seconds");
             Console.WriteLine();
 
@@ -485,17 +485,17 @@ namespace MLDotNet_BaseballRegressionLookup
             Console.WriteLine("Bad Baseball Player Prediction");
             Console.WriteLine("------------------------------");
             Console.WriteLine("Hits Prediction: " + predBadHits.Hits.ToString() + " | " + "Actual Hits: " + badMLBBatter.H);
-            Console.WriteLine("Hits Prediction: " + predBadRandomSearchHits.Hits.ToString() + " | " + "Actual Hits: " + badMLBBatter.H);
+            Console.WriteLine("Hits Prediction: " + predBadRandomSearchHits.Hits.ToString() + " | " + "Actual Hits: " + badMLBBatter.H + " (Best Random Search Model)");
             Console.WriteLine();
             Console.WriteLine("Average Baseball Player Prediction");
             Console.WriteLine("------------------------------");
             Console.WriteLine("Hits Prediction: " + predAverageHits.Hits.ToString() + " | " + "Actual Hits: " + averageMLBBatter.H);
-            Console.WriteLine("Hits Prediction: " + predAverageRandomSearchHits.Hits.ToString() + " | " + "Actual Hits: " + averageMLBBatter.H);
+            Console.WriteLine("Hits Prediction: " + predAverageRandomSearchHits.Hits.ToString() + " | " + "Actual Hits: " + averageMLBBatter.H + " (Best Random Search Model)");
             Console.WriteLine();
             Console.WriteLine("Great Baseball Player Prediction");
             Console.WriteLine("------------------------------");
             Console.WriteLine("Hits Prediction: " + predGreatHits.Hits.ToString() + " | " + "Actual Hits: " + greatMLBBatter.H);
-            Console.WriteLine("Hits Prediction: " + predGreatRandomSearchHits.Hits.ToString() + " | " + "Actual Hits: " + greatMLBBatter.H);
+            Console.WriteLine("Hits Prediction: " + predGreatRandomSearchHits.Hits.ToString() + " | " + "Actual Hits: " + greatMLBBatter.H + " (Best Random Search Model)");
             Console.WriteLine();
 
             #endregion
