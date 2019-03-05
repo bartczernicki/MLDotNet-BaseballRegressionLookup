@@ -35,7 +35,11 @@ namespace MLDotNet_BaseballRegressionLookup
                 "GeneralizedAdditiveModels", "OnlineGradientDescent",
                 "PoissonRegression", "StochasticDualCoordinateAscent"};
 
+        // MLContext Seed
         private static int mlContextSeed = 100;
+
+        // Number of Random Search iterations
+        private static int maxNumberOfRandomSearchIterations = 40;
 
         static void Main(string[] args)
         {
@@ -213,10 +217,10 @@ namespace MLDotNet_BaseballRegressionLookup
             var dateTime = DateTime.Now;
 
             // Build a list of Random Search Hyperparameters
-            var maxNumberOfIterations = 20;
-            var numberOfIterationsArray = Enumerable.Range(0, maxNumberOfIterations).ToArray();
+            Console.WriteLine("Building the Random Search hyperparameters...");
+            var numberOfIterationsArray = Enumerable.Range(0, maxNumberOfRandomSearchIterations).ToArray();
             ParallelOptions options = new ParallelOptions();
-            options.MaxDegreeOfParallelism = 14;  // usually set this to number of available worker threads
+            options.MaxDegreeOfParallelism = 1;  // usually set this to number of available worker threads
 
             Parallel.For(0, numberOfIterationsArray.Length, options,
                          i =>
@@ -237,7 +241,7 @@ namespace MLDotNet_BaseballRegressionLookup
                              var numberOfleaves = newRandom.Next(2, 1200); // minimum is 2
                              var numberOfTrees = newRandom.Next(1, 1200);
                              var minDataPointsInTrees = newRandom.Next(1, 25);
-                             var learningRate = newRandom.NextDouble() * (maxLearningRate - minLearningRate) + minLearningRate;
+                             var learningRate = Math.Round(newRandom.NextDouble() * (maxLearningRate - minLearningRate) + minLearningRate, 4);
                              var modelName = algorithmName + "RandomSearch" + iteration;
 
                              // Add the metrics to the Concurrent Bag (List)
@@ -259,22 +263,24 @@ namespace MLDotNet_BaseballRegressionLookup
                          }
                         );
 
+            
             // Build a list of Tasks to parallelize the model creation using random hyperparameter search
             List<Task> modelTasks = new List<Task>();
             foreach(var modelTaskHyperParameters in hyperparameterPerformanceMetricResults)
             {
                 var appPath = _appPath;
-                var task = new Task<RegressionTreeAlgorithmHyperparameter>(
-                    () =>
-                ProcessModel(modelTaskHyperParameters, cachedValidationData, appPath)//;
-                    );
-                modelTasks.Add(task);
+                //var task = new Task<RegressionTreeAlgorithmHyperparameter>(
+                //    () =>
+                ProcessModel(modelTaskHyperParameters, cachedValidationData, appPath);
+                //    );
+                //modelTasks.Add(task);
 
-                task.Start();
+                //task.Start();
             }
 
             // Wait for all of the tasks to complete
-            Task.WaitAll(modelTasks.ToArray());
+            Console.WriteLine("Building the ML.NET models...");
+            //Task.WaitAll(modelTasks.ToArray());
 
             // TODO: Remove
             //    Parallel.For(0, numberOfIterationsArray.Length, options,
@@ -379,13 +385,56 @@ namespace MLDotNet_BaseballRegressionLookup
             var loadedModelRandomSearchHits = Utilities.LoadModel(_mlContext, (Utilities.GetModelPath(_appPath,
                 hyperparameterPerformanceMetricResultsOrdered[0].GetModelName(), false, "H")));
 
-            //var transformedData = loadedModelHits.Transform(cachedValidationData);
-            //var transformedData2 = loadedModelRandomSearchHits.Transform(cachedValidationData);
-            //var test1 = transformedData.Preview(1000).RowView.ToArray();
-            //var test2 = transformedData2.Preview(1000).RowView.ToArray();
+            var transformedData = loadedModelHits.Transform(cachedValidationData);
+            var transformedData2 = loadedModelRandomSearchHits.Transform(cachedValidationData);
+
+            #if DEBUG
+            var test1 = transformedData.Preview(1000).RowView.ToArray();
+            var test2 = transformedData2.Preview(1000).RowView.ToArray();
+            #endif
+
             // Evaluate the model
-            //var regressionMetricsTest = _mlContext.Regression.Evaluate(transformedData, "H");
-            //var regressionMetricsTest2 = _mlContext.Regression.Evaluate(transformedData2, "H");
+            var regressionMetricsBaseModelHits = _mlContext.Regression.Evaluate(transformedData, "H");
+            var regressionMetricsRandomSearchModelHits = _mlContext.Regression.Evaluate(transformedData2, "H");
+
+            var consoleOutputBaselineModel = string.Format(
+               "Evaluation Metrics for {0} | {1}\n" +
+               "{2}\n" +
+               "**********************************************\n" +
+               "L1:         {3}\n" +
+               "L2:         {4}\n" +
+               "LossFn:     {5}\n" +
+               "Rms:        {6}\n" +
+               "RSquared    {7}\n",
+                "Base-FastTree", "Hits",
+                "Baseline hyperparmeters",
+                Math.Round(regressionMetricsBaseModelHits.L1, 5).ToString(),
+                Math.Round(regressionMetricsBaseModelHits.L2, 5).ToString(),
+                Math.Round(regressionMetricsBaseModelHits.LossFn, 5).ToString(),
+                Math.Round(regressionMetricsBaseModelHits.Rms, 5).ToString(),
+                Math.Round(regressionMetricsBaseModelHits.RSquared, 5).ToString()
+                );
+            Console.Out.WriteLineAsync(consoleOutputBaselineModel);
+
+            var consoleOutputRandomSearchModel = string.Format(
+               "Evaluation Metrics for {0} | {1}\n" +
+               "{2}\n" +
+               "**********************************************\n" +
+               "L1:         {3}\n" +
+               "L2:         {4}\n" +
+               "LossFn:     {5}\n" +
+               "Rms:        {6}\n" +
+               "RSquared    {7}\n",
+                hyperparameterPerformanceMetricResultsOrdered[0].GetModelName(), "Hits",
+                hyperparameterPerformanceMetricResultsOrdered[0].ToString(),
+                Math.Round(regressionMetricsRandomSearchModelHits.L1, 5).ToString(),
+                Math.Round(regressionMetricsRandomSearchModelHits.L2, 5).ToString(),
+                Math.Round(regressionMetricsRandomSearchModelHits.LossFn, 5).ToString(),
+                Math.Round(regressionMetricsRandomSearchModelHits.Rms, 5).ToString(),
+                Math.Round(regressionMetricsRandomSearchModelHits.RSquared, 5).ToString()
+                );
+            Console.Out.WriteLineAsync(consoleOutputRandomSearchModel);
+
 
             // Create prediction engine
             var predEngineHits = loadedModelHits.CreatePredictionEngine<MLBBaseballBatter, HitsPredictions>(_mlContext);
